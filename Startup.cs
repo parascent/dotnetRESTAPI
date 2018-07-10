@@ -76,6 +76,7 @@ namespace dotnetapi
                     defaults: new { controller = "Api", action = "Delete"},
                     constraints:new { httpMethod = new HttpMethodRouteConstraint(new string[] { "DELETE" }) }
                 );
+                routes.MapRoute("CatchAll", "{*url}", new {controller = "Error", action = "MethodNotFound"});
             });
         }
     }
