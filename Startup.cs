@@ -31,7 +31,7 @@ namespace dotnetapi
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.Add(new ServiceDescriptor(typeof(TestDBContext), new TestDBContext(Configuration.GetConnectionString("DefaultConnection"))));
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" }); });
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "REST API", Version = "v1" }); });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,15 +47,19 @@ namespace dotnetapi
             }
 
             app.UseHttpsRedirection();
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "REST API");
-            });
+            
 
 
 
             app.UseMvc( routes =>{
+
+                app.UseStaticFiles();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "REST API");
+                });
+                
                 routes.MapRoute(
                     name:"api-retrieve",
                     template:"api/{model}",
@@ -87,6 +91,7 @@ namespace dotnetapi
                     constraints:new { httpMethod = new HttpMethodRouteConstraint(new string[] { "DELETE" }) }
                 );
                 routes.MapRoute("CatchAll", "{*url}", new {controller = "Error", action = "MethodNotFound"});
+
             });
         }
     }

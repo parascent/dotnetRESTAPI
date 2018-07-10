@@ -10,14 +10,12 @@ namespace dotnetapi.Controllers
     // [ApiController]
     public class ApiController : Controller
     {
-        // GET api/values
-        // [HttpGet("{model},{page}")]
-        public ActionResult<IEnumerable<string>> Retrieve1()
-        {
-            // string[] = 
-            return new string[] { "value1", "value2" };
-        }
-
+        [Produces("application/json")]  
+        // [Route("api")]    
+        
+        
+        [Route("api")]
+        [HttpGet]
         public JsonResult Retrieve([FromRoute] string model, [FromQuery] string id = "0")
         {   
             string[] responseString = new string[] { model, id };
