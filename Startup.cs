@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using dotnetapi.Models;
+using Swashbuckle.AspNetCore.Swagger;
 // using dotnetapi.Controllers;
 
 namespace dotnetapi
@@ -30,6 +31,7 @@ namespace dotnetapi
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.Add(new ServiceDescriptor(typeof(TestDBContext), new TestDBContext(Configuration.GetConnectionString("DefaultConnection"))));
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" }); });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +47,14 @@ namespace dotnetapi
             }
 
             app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "REST API");
+            });
+
+
+
             app.UseMvc( routes =>{
                 routes.MapRoute(
                     name:"api-retrieve",
