@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using dotnetapi.Models;
+// using dotnetapi.Controllers;
 
 namespace dotnetapi
 {
@@ -27,6 +29,7 @@ namespace dotnetapi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.Add(new ServiceDescriptor(typeof(TestDBContext), new TestDBContext(Configuration.GetConnectionString("DefaultConnection"))));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,26 +48,32 @@ namespace dotnetapi
             app.UseMvc( routes =>{
                 routes.MapRoute(
                     name:"api-retrieve",
-                    template:"api/{area:exists}",
-                    defaults: "",
-                    constraints:new {httpMethod =   new HttpMethodRouteConstraint(new string[] { "GET" }) },
+                    template:"api/{model}",
+                    defaults: new {controller="Api",action="Retrieve",page=1},
+                    constraints:new {httpMethod =   new HttpMethodRouteConstraint(new string[] { "GET" })}
+                );
+                routes.MapRoute(
+                    name: "api-retrieve-id",
+                    template: "api/{model}/{id}",
+                    defaults: new { controller = "Api", action = "RetrieveById" },
+                    constraints: new { httpMethod = new HttpMethodRouteConstraint(new string[] { "GET" }) }
                 );
                 routes.MapRoute(
                     name:"api-add", 
-                    template:"api/{area:exists}",
-                    defaults: "",
+                    template:"api/{model}",
+                    defaults: new { controller = "Api", action = "Add"},
                     constraints:new { httpMethod = new HttpMethodRouteConstraint(new string[] { "POST" }) }
                 );
                 routes.MapRoute(
                     name:"api-update", 
-                    template:"api/{area:exists}",
-                    defaults: "",
+                    template:"api/{model}/{id}",
+                    defaults: new { controller = "Api", action = "Update" },
                     constraints:new { httpMethod = new HttpMethodRouteConstraint(new string[] { "PUT" }) }
                 );
                 routes.MapRoute(
                     name:"api-delete", 
-                    template:"api/{area:exists}",
-                    defaults: "",
+                    template:"api/{model}/{id}",
+                    defaults: new { controller = "Api", action = "Delete"},
                     constraints:new { httpMethod = new HttpMethodRouteConstraint(new string[] { "DELETE" }) }
                 );
             });
