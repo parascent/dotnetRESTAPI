@@ -37,7 +37,8 @@ namespace dotnetapi.Models
                     }
                 }
             }
-                return list;  
+            
+            return list;  
         }
 
     }
