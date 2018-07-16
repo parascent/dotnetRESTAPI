@@ -10,23 +10,21 @@ namespace dotnetapi.Controllers
     // [ApiController]
     public class ApiController : Controller
     {
-        [Produces("application/json")]  
+        // [Produces("application/json")]  
         // [Route("api")]    
         
         
-        [Route("api")]
         [HttpGet]
-        public JsonResult Retrieve([FromRoute] string model, [FromQuery] string id = "0")
+        public JsonResult retrieve([FromRoute] string model, [FromQuery] string id)
         {   
             string[] responseString = new string[] { model, id };
             TestDBContext context = HttpContext.RequestServices.GetService(typeof(dotnetapi.Models.TestDBContext)) as TestDBContext;
-            return Json(context.GetAllTest()) ;
-        }
-
-        public JsonResult RetrieveById([FromRoute] string model, string id = "0")
-        {
-            string[] responseString = new string[] { model, id };
-            return Json(responseString);
+            if(id == null){
+                return Json(context.GetAllTest()) ;
+            }
+            else{
+                return Json(model);
+            }
         }
 
 
@@ -47,5 +45,7 @@ namespace dotnetapi.Controllers
         public void Delete(int id)
         {
         }
+
+        
     }
 }

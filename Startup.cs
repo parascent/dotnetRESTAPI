@@ -59,36 +59,11 @@ namespace dotnetapi
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "REST API");
                 });
-                
+
                 routes.MapRoute(
-                    name:"api-retrieve",
-                    template:"api/{model}",
-                    defaults: new {controller="Api",action="Retrieve",page=1},
-                    constraints:new {httpMethod =   new HttpMethodRouteConstraint(new string[] { "GET" })}
-                );
-                routes.MapRoute(
-                    name: "api-retrieve-id",
-                    template: "api/{model}/{id}",
-                    defaults: new { controller = "Api", action = "RetrieveById" },
-                    constraints: new { httpMethod = new HttpMethodRouteConstraint(new string[] { "GET" }) }
-                );
-                routes.MapRoute(
-                    name:"api-add", 
-                    template:"api/{model}",
-                    defaults: new { controller = "Api", action = "Add"},
-                    constraints:new { httpMethod = new HttpMethodRouteConstraint(new string[] { "POST" }) }
-                );
-                routes.MapRoute(
-                    name:"api-update", 
-                    template:"api/{model}/{id}",
-                    defaults: new { controller = "Api", action = "Update" },
-                    constraints:new { httpMethod = new HttpMethodRouteConstraint(new string[] { "PUT" }) }
-                );
-                routes.MapRoute(
-                    name:"api-delete", 
-                    template:"api/{model}/{id}",
-                    defaults: new { controller = "Api", action = "Delete"},
-                    constraints:new { httpMethod = new HttpMethodRouteConstraint(new string[] { "DELETE" }) }
+                    name:"API",
+                    template:"api/{model}/{action}/{id?}",
+                    defaults: new {controller="Api"}
                 );
                 routes.MapRoute("CatchAll", "{*url}", new {controller = "Error", action = "MethodNotFound"});
 
