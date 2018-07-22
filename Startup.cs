@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using dotnetapi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 // using dotnetapi.Controllers;
 
@@ -30,7 +29,7 @@ namespace dotnetapi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.Add(new ServiceDescriptor(typeof(TestDBContext), new TestDBContext(Configuration.GetConnectionString("DefaultConnection"))));
+            // services.Add(new ServiceDescriptor(typeof(TestDBContext), new TestDBContext(Configuration.GetConnectionString("DefaultConnection"))));
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "REST API", Version = "v1" }); });
         }
 
@@ -63,7 +62,7 @@ namespace dotnetapi
                 routes.MapRoute(
                     name:"API",
                     template:"api/{model}/{action}/{id?}",
-                    defaults: new {controller="Api"}
+                    defaults: new {controller="Rest"}
                 );
                 routes.MapRoute("CatchAll", "{*url}", new {controller = "Error", action = "MethodNotFound"});
 
